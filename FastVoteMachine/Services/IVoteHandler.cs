@@ -18,6 +18,21 @@ public interface IVoteHandler
     public int CreateVoting(string name);
 
     /// <summary>
+    /// Adding a new option to vote for
+    /// </summary>
+    /// <param name="id">The id of the vote</param>
+    /// <param name="option">The name of the option to be added</param>
+    /// <returns>Whether the operation was successful</returns>
+    public bool AddOption(int id, string option);
+
+    /// <summary>
+    /// Get all currently available options
+    /// </summary>
+    /// <param name="id">The id of the vote</param>
+    /// <returns>A list of all options</returns>
+    public List<string> GetOptions(int id);
+    
+    /// <summary>
     /// Retrieve information about a vote
     /// </summary>
     /// <param name="id">The id of the vote</param>

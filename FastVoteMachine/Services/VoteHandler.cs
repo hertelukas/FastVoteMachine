@@ -22,6 +22,16 @@ public class VoteHandler : IVoteHandler
         return index;
     }
 
+    public bool AddOption(int id, string option)
+    {
+        return _votes[id].AddOption(option);
+    }
+
+    public List<string> GetOptions(int id)
+    {
+        return new List<string>(_votes[id].Options.Keys);
+    }
+
     public Dictionary<string, int> GetVotes(int id)
     {
         return _votes[id].Options;

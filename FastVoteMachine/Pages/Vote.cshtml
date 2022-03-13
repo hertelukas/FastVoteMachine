@@ -8,6 +8,28 @@
 <div class="text-center">
     <h1 class="display-4"> - @Model.Name - </h1>
     <p id="connected">Connected users: 0</p>
+    <hr>
+    
+    @* Input *@
+    <div class="small-container">
+        <form action="" id="option-form" class="row g-3 d-flex">
+            <div class="col-auto flex-fill">
+                <input type="text" class="form-control" id="option-input" placeholder="Add a new option...">
+            </div>
+            <div class="col-auto flex">
+                <button type="submit" class="btn btn-dark">Add</button>
+            </div>
+        </form>
+    </div>
+    
+    @* Options  *@
+    <div id="option-container">
+        
+    </div>
+    
+    <form action="" id="vote-form" class="text-center">
+        <button id="vote-button" type="submit" class="btn btn-dark">Submit</button>
+    </form>
 </div>
 
 <script src="~/js/signalr/dist/browser/signalr.js"></script>
@@ -18,8 +40,39 @@
     
     let connectedText = document.getElementById("connected");
     
+    let optionForm = document.getElementById("option-form");
+    let optionInput = document.getElementById("option-input");
+    
+    let optionContainer = document.getElementById("option-container");
+    
+    let voteForm = document.getElementById("vote-form");
+    let voteButton = document.getElementById("vote-button");
+   
+    let options = [];
+    
+    // Receiving messages
     connection.on("UpdateConnected", function(amount) {
       connectedText.innerText = `Connected users: ${amount}`;
+    });
+    
+    connection.on("AddedOption", function(option) {
+      let label = document.createElement("label");
+      label.setAttribute("for", option + "-option");
+      label.textContent = option;
+      label.classList.add("form-label");
+      
+      let input = document.createElement('input');
+      input.setAttribute('type', 'range');
+      input.setAttribute('min', 0);
+      input.setAttribute('max', 5);
+      input.setAttribute('step', 1);
+      input.setAttribute('name', option);
+      input.setAttribute('id', option + '-option');
+      input.classList.add("form-range");
+      
+      options.push(input);
+      optionContainer.appendChild(label);
+      optionContainer.appendChild(input);
     });
     
     // Connect to the Hub
@@ -32,6 +85,15 @@
       // TODO handle error
       return console.error(err.toString());
     });
-    
+   
+    // Add new option
+    optionForm.addEventListener('submit', function(e) {
+      e.preventDefault();
+      if (optionInput.value) {
+        connection.invoke("AddOption", @Model.Id, optionInput.value).catch(function(err) {
+          return console.error(err.toString());
+        })
+      }
+    }); 
     
 </script>

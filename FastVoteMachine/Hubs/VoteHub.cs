@@ -17,10 +17,32 @@ public class VoteHub : Hub
         await Clients.All.SendAsync("ReceiveMessage", user, message);
     }
 
+    public async Task AddOption(int id, string option)
+    {
+        if (_voteHandler.AddOption(id, option))
+        {
+            await SendOptionToEveryone(id, option);
+        }
+    }
+
+    private async Task SendOptionToEveryone(int group, string option)
+    {
+        await Clients.Group(group.ToString()).SendAsync("AddedOption", option);
+    }
+
+    private async Task SendOptionToConnection(string connectionId, string option)
+    {
+        await Clients.Client(connectionId).SendAsync("AddedOption", option);
+    }
     public async Task Connect(int id)
     {
         await Groups.AddToGroupAsync(Context.ConnectionId, id.ToString());
 
+        foreach (var option in _voteHandler.GetOptions(id))
+        {
+            await SendOptionToConnection(Context.ConnectionId, option);
+        }
+        
         _voteHandler.Connect(id, Context.ConnectionId);
         await UpdateConnected(id);
     }

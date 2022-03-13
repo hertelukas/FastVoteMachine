@@ -14,9 +14,9 @@ public class Vote
         Name = name;
     }
 
-    public void AddOption(string option)
+    public bool AddOption(string option)
     {
-        Options.TryAdd(option, 0);
+        return Options.TryAdd(option, 0);
     }
 
     public void VoteFor(string option)
