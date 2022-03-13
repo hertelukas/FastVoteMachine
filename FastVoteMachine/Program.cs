@@ -8,6 +8,13 @@ builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
 builder.Services.AddSingleton<IVoteHandler, VoteHandler>();
 
+// Configure URLs
+builder.Services.Configure<RouteOptions>(options =>
+{
+    options.LowercaseUrls = true;
+    options.LowercaseQueryStrings = true;
+});
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
