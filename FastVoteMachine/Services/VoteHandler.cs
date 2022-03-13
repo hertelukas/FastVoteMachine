@@ -3,7 +3,6 @@ namespace FastVoteMachine.Services;
 public class VoteHandler : IVoteHandler
 {
     private readonly List<Vote> _votes;
-
     private readonly Dictionary<string, HashSet<int>> _joinedGroups = new();
 
     public VoteHandler()
@@ -16,16 +15,21 @@ public class VoteHandler : IVoteHandler
         _votes[id].VoteFor(option);
     }
 
-    public int CreateVoting()
+    public int CreateVoting(string name)
     {
-        int index = _votes.Count;
-        _votes.Add(new Vote());
+        var index = _votes.Count;
+        _votes.Add(new Vote(name));
         return index;
     }
 
     public Dictionary<string, int> GetVotes(int id)
     {
         return _votes[id].Options;
+    }
+
+    public string GetName(int id)
+    {
+        return _votes[id].Name;
     }
 
     public int GetConnected(int id)

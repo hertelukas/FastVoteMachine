@@ -5,11 +5,13 @@ public class Vote
 {
     public Dictionary<string, int> Options { get; }
     public int Connected { get; private set; }
-
-    public Vote()
+    public string Name { get; }
+    public Vote(string name)
     {
+        Console.WriteLine("Creating vote " + name);
         Options = new Dictionary<string, int>();
         Connected = 0;
+        Name = name;
     }
 
     public void AddOption(string option)

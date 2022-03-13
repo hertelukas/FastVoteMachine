@@ -13,6 +13,7 @@ public class IndexModel : PageModel
     [Required]
     [StringLength(100)]
     [Display(Name = "Vote Name")]
+    [BindProperty]
     public string Name { get; set; }
     public IndexModel(ILogger<IndexModel> logger, IVoteHandler voteHandler)
     {
@@ -31,7 +32,7 @@ public class IndexModel : PageModel
             return Page();
         }
 
-        return RedirectToPage("Vote", new { id = _voteHandler.CreateVoting()}); 
+        return RedirectToPage("Vote", new { id = _voteHandler.CreateVoting(Name)}); 
     }
     
     
