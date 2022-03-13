@@ -7,7 +7,6 @@ public class VoteHub : Hub
 {
     private readonly IVoteHandler _voteHandler;
 
-    private string lastJoined = "";
     public VoteHub(IVoteHandler voteHandler)
     {
         _voteHandler = voteHandler;
@@ -23,7 +22,6 @@ public class VoteHub : Hub
         await Groups.AddToGroupAsync(Context.ConnectionId, id.ToString());
 
         _voteHandler.Connect(id, Context.ConnectionId);
-        lastJoined = Context.ConnectionId;
         await UpdateConnected(id);
     }
 
