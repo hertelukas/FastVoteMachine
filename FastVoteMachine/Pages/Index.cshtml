@@ -7,4 +7,9 @@
 <div class="text-center">
     <h1 class="display-4">Welcome</h1>
     <p>Learn about <a href="https://docs.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+    <form asp-page="Index">
+        <label asp-for="Name"></label>
+        <input asp-for="Name">
+        <button type="submit" class="btn btn-primary">Create</button>
+    </form>
 </div>

@@ -1,0 +1,37 @@
+@page "{id}"
+@model FastVoteMachine.Pages.Vote
+
+@{
+    ViewData["Title"] = Model.Id;
+}
+
+<div class="text-center">
+    <h1 class="display-4">Welcome to @Model.Id</h1>
+    <p id="connected">Connected users: 0</p>
+</div>
+
+<script src="~/js/signalr/dist/browser/signalr.js"></script>
+
+<script >
+    "use strict"
+    let connection = new signalR.HubConnectionBuilder().withUrl("/voteHub").build();
+    
+    let connectedText = document.getElementById("connected");
+    
+    connection.on("UpdateConnected", function(amount) {
+      connectedText.innerText = `Connected users: ${amount}`;
+    });
+    
+    // Connect to the Hub
+    connection.start().then(function () {
+        connection.invoke("Connect", @Model.Id).catch(function (err) {
+            // TODO handle error
+            return console.error(err.toString());    
+        });
+    }).catch(function(err) {
+      // TODO handle error
+      return console.error(err.toString());
+    });
+    
+    
+</script>
