@@ -8,7 +8,6 @@ public class Vote
     public string Name { get; }
     public Vote(string name)
     {
-        Console.WriteLine("Creating vote " + name);
         Options = new Dictionary<string, int>();
         Connected = 0;
         Name = name;
