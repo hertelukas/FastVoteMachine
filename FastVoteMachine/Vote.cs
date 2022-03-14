@@ -1,6 +1,8 @@
 namespace FastVoteMachine;
 
-// This class represents one ongoing vote
+/// <summary>
+/// A simple (not thread safe) implementation for storing information about a vote
+/// </summary>
 public class Vote
 {
     public Dictionary<string, int> Options { get; }

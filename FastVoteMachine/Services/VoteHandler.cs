@@ -1,5 +1,9 @@
 namespace FastVoteMachine.Services;
 
+/// <summary>
+/// This implementation should only be used for testing purposes:
+/// It's not thread safe but should be.
+/// </summary>
 public class VoteHandler : IVoteHandler
 {
     private readonly List<Vote> _votes;
