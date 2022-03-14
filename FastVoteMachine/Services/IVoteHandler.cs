@@ -8,7 +8,8 @@ public interface IVoteHandler
     /// <param name="id">The id of the vote</param>
     /// <param name="option">The option the user wants to vote for.
     /// If the option does not exist, the vote gets ignored</param>
-    public void VoteFor(int id, string option);
+    /// <param name="amount">The amount of votes for this option</param>
+    public void VoteFor(int id, string option, int amount);
 
     /// <summary>
     /// Creates a new Voting 

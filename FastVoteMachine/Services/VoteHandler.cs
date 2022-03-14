@@ -10,9 +10,9 @@ public class VoteHandler : IVoteHandler
         _votes = new List<Vote>();
     }
 
-    public void VoteFor(int id, string option)
+    public void VoteFor(int id, string option, int amount)
     {
-        _votes[id].VoteFor(option);
+        _votes[id].VoteFor(option, amount);
     }
 
     public int CreateVoting(string name)

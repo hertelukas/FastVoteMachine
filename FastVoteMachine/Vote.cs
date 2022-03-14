@@ -18,11 +18,11 @@ public class Vote
         return Options.TryAdd(option, 0);
     }
 
-    public void VoteFor(string option)
+    public void VoteFor(string option, int amount)
     {
         if (Options.ContainsKey(option))
         {
-            Options[option]++;
+            Options[option] += amount;
         }
     }
 
