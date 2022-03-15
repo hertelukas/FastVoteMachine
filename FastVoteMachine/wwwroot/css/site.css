@@ -16,3 +16,13 @@ html {
 body {
   margin-bottom: 60px;
 }
+
+.small-container{
+  margin: auto;
+  width: 70%;
+}
+
+#option-container{
+  margin: auto;
+  width: 40%;
+}
