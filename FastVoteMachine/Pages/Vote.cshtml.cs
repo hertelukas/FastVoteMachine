@@ -1,4 +1,5 @@
 using FastVoteMachine.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 
 namespace FastVoteMachine.Pages;
@@ -16,9 +17,19 @@ public class Vote : PageModel
         _voteHandler = voteHandler;
     }
 
-    public void OnGet(int id)
+    public IActionResult OnGet(int id)
     {
         Id = id;
-        Name = _voteHandler.GetName(id);
+        try
+        {
+            Name = _voteHandler.GetName(id);
+        }
+        catch (ArgumentOutOfRangeException)
+        {
+            Console.WriteLine("Vote does not exist!");
+            return RedirectToPage("/Index");
+        }
+
+        return Page();
     }
 }
