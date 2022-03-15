@@ -33,6 +33,5 @@ app.UseRouting();
 app.UseAuthorization();
 
 app.MapRazorPages();
-app.MapHub<ChatHub>("/chatHub");
 app.MapHub<VoteHub>("/voteHub");
 app.Run();
