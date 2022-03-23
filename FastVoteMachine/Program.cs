@@ -1,13 +1,30 @@
 using FastVoteMachine.Hubs;
 using FastVoteMachine.Services;
+using FastVoteMachine.Services.Entities;
 using Microsoft.AspNetCore.HttpOverrides;
+using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddSignalR();
-builder.Services.AddSingleton<IVoteHandler, VoteHandler>();
+builder.Services.AddScoped<IVoteHandler, VoteDbHandler>();
+
+// Load config files
+builder.Configuration.AddJsonFile("secrets.json", false);
+
+
+// Database service
+var connString = builder.Configuration.GetConnectionString("DefaultConnection");
+var serverVersion = new MariaDbServerVersion(new Version(10, 5));
+
+builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion)
+    // Remove in production
+    .LogTo(Console.WriteLine, LogLevel.Information)
+    .EnableSensitiveDataLogging()
+    .EnableDetailedErrors()
+);
 
 // Configure URLs
 builder.Services.Configure<RouteOptions>(options =>
