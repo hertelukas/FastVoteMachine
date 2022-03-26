@@ -6,9 +6,8 @@ namespace FastVoteMachine.Pages;
 
 public class Vote : PageModel
 {
-
     private readonly IVoteHandler _voteHandler;
-    
+
     public int Id { get; private set; }
     public string Name { get; private set; }
 
@@ -24,9 +23,8 @@ public class Vote : PageModel
         {
             Name = _voteHandler.GetName(id);
         }
-        catch (ArgumentOutOfRangeException)
+        catch (Exception)
         {
-            Console.WriteLine("Vote does not exist!");
             return RedirectToPage("/Index");
         }
 
