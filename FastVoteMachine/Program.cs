@@ -12,19 +12,14 @@ builder.Services.AddSignalR();
 builder.Services.AddScoped<IVoteHandler, VoteDbHandler>();
 
 // Load config files
-builder.Configuration.AddJsonFile("secrets.json", false);
+builder.Configuration.AddJsonFile("secrets.json", true);
 
 
 // Database service
 var connString = builder.Configuration.GetConnectionString("DefaultConnection");
 var serverVersion = new MariaDbServerVersion(new Version(10, 5));
 
-builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion)
-    // Remove in production
-    .LogTo(Console.WriteLine, LogLevel.Information)
-    .EnableSensitiveDataLogging()
-    .EnableDetailedErrors()
-);
+builder.Services.AddDbContext<AppDbContext>(options => options.UseMySql(connString, serverVersion));
 
 // Configure URLs
 builder.Services.Configure<RouteOptions>(options =>
@@ -39,6 +34,7 @@ var app = builder.Build();
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
+    Console.WriteLine("Running in production.");
     app.UseExceptionHandler("/Error");
 
     // Configure for web hosting
@@ -47,6 +43,7 @@ if (!app.Environment.IsDevelopment())
         ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto
     });
 
+    app.UseAuthentication();
     // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
@@ -55,7 +52,7 @@ else
     app.UseDeveloperExceptionPage();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
 app.UseStaticFiles();
 
 app.UseRouting();
