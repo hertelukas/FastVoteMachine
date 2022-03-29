@@ -1,12 +1,14 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Home";
 }
 
 <div class="text-center small-container">
     <h1 class="display-4">Welcome</h1>
-    <br>
+    <p>
+        Create and share simple, public votes with real-time updates.
+    </p>
     <form asp-page="Index">
         <div class="form-group">
             <label asp-for="Name"></label>

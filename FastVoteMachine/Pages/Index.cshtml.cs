@@ -11,7 +11,7 @@ public class IndexModel : PageModel
     private readonly IVoteHandler _voteHandler;
 
     [Required]
-    [StringLength(100)]
+    [StringLength(50)]
     [Display(Name = "Vote Name")]
     [BindProperty]
     public string Name { get; set; }
