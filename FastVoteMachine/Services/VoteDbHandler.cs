@@ -1,3 +1,4 @@
+using System.Data;
 using FastVoteMachine.Services.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -14,13 +15,21 @@ public class VoteDbHandler : IVoteHandler
         _context = context;
     }
 
+    /// <summary>
+    /// Loads a vote
+    /// </summary>
+    /// <param name="id">The id of a vote</param>
+    /// <returns>The vote including its options</returns>
+    /// <exception cref="RowNotInTableException">If the vote couldn't be found</exception>
     private VoteEntity _getVote(int id)
     {
-        var vote = _context.Votes.Find(id);
+        var vote = _context.Votes
+            .Include(v => v.Options)
+            .FirstOrDefault(v => v.VoteEntityId == id);
 
         if (vote == null)
         {
-            throw new Exception("Could not find vote!");
+            throw new RowNotInTableException("Could not find vote!");
         }
 
         return vote;
@@ -28,10 +37,7 @@ public class VoteDbHandler : IVoteHandler
 
     public void VoteFor(int id, string option, int amount)
     {
-        var options = _context.Votes
-            .Where(v => v.VoteEntityId == id)
-            .Select(v => v.Options.ToList())
-            .Single();
+        var options = _getVote(id).Options;
 
         foreach (var tmp in options)
         {
@@ -71,18 +77,15 @@ public class VoteDbHandler : IVoteHandler
 
     public List<string> GetOptions(int id)
     {
-        return _context.Votes
-            .Where(v => v.VoteEntityId == id)
-            .Select(v => v.Options.Select(o => o.Name).ToList())
-            .Single();
+        return _getVote(id)
+            .Options
+            .Select(o => o.Name)
+            .ToList();
     }
 
     public Dictionary<string, int> GetVotes(int id)
     {
-        var options = _context.Votes
-            .Where(v => v.VoteEntityId == id)
-            .Select(v => v.Options)
-            .First();
+        var options = _getVote(id).Options;
 
         return options == null
             ? new Dictionary<string, int>()
@@ -91,10 +94,7 @@ public class VoteDbHandler : IVoteHandler
 
     public string GetName(int id)
     {
-        return _context.Votes
-            .Where(v => v.VoteEntityId == id)
-            .Select(v => v.Name)
-            .Single();
+        return _getVote(id).Name;
     }
 
     public int GetConnected(int id)
